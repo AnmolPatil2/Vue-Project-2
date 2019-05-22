@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import db from "../firebase";
 export default {
   name: "Chat",
   props: ["name"],
@@ -16,7 +17,19 @@ export default {
   },
   methods: {
     addmessage() {
-      console.log(this.newmessage, this.name, Date.now());
+      if (this.newmessage) {
+        console.log(this.newmessage);
+        db.collection("messages")
+          .add({
+            content: this.newmessage,
+            name: this.name,
+            timestamp: Date.now()
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        this.newmessage = null;
+      }
     }
   }
 };
